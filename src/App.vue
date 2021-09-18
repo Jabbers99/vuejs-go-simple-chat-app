@@ -1,3 +1,24 @@
+<script>
+
+    import Chatbox from './components/Chatbox';
+    import UsernameDialog from './components/UsernameDialog';
+    
+    
+    export default {
+        name: 'App',
+
+        components: {
+            UsernameDialog,
+            Chatbox,
+        },
+        mounted() {
+            this.$refs.Chatbox.connect(this.$refs.UsernameDialog)
+            this.$options.sockets.onmessage = (data) => console.log(data)
+            this.$options.sockets.onopen = (data) => console.log(data)
+
+        }
+    };
+</script>
 <template>
   <v-app>
     <v-app-bar
@@ -8,29 +29,13 @@
     </v-app-bar>
 
     <v-main>
-      <UsernameDialog/>
-      <Chatbox />
+      <UsernameDialog ref="UsernameDialog" />
+      <Chatbox ref="Chatbox" />
     </v-main>
   </v-app>
 </template>
 
-<script>
-import Chatbox from './components/Chatbox';
-import UsernameDialog from './components/UsernameDialog';
 
-export default {
-  name: 'App',
-
-  components: {
-    UsernameDialog,
-    Chatbox,
-  },
-
-  data: () => ({
-    //
-  }),
-};
-</script>
 
 <style>
 html {
