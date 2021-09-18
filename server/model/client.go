@@ -37,7 +37,7 @@ func (c *Client) WritePump() {
 	for {
 		select {
 		case message, ok := <-c.Send:
-			fmt.Println("testc")
+
 			c.Conn.SetWriteDeadline(time.Now().Add(writeWait))
 			if !ok {
 				// The hub closed the channel.
@@ -70,6 +70,9 @@ func (c *Client) WritePump() {
 		}
 	}
 }
+
+
+
 // ReadPump pumps messages from the websocket Connection to the hub.
 //
 // The application runs ReadPump in a per-Connection goroutine. The application
@@ -97,9 +100,7 @@ func (c *Client) ReadPump() {
 
 		message = bytes.TrimSpace(bytes.Replace(message, newline, space, -1))
 		if (c.Authed) {
-			msgObj := make(map[string]string)
-			msgObj["username"] = c.Username
-			msgObj["message"] = string(message)
+			msgObj := CreateDefaultMessage(string(message), c.Username)
 
 			msg, _ := json.Marshal(msgObj)
 			c.Hub.broadcast <- msg
@@ -107,6 +108,7 @@ func (c *Client) ReadPump() {
 
 			c.Username = string(message)
 			c.Authed = true
+			c.Hub.BroadcastInfoMessage(c.Username + " has joined the chat.")
 		}
 		fmt.Println("A: ", c.Username, c.Username == "", c.Authed)
 	}

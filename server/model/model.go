@@ -24,10 +24,17 @@ var (
 	space   = []byte{' '}
 )
 
-
 type Message struct {
 	Username string `json:"username"`
 	Message string `json:"message"`
+	MessageType string `json:"messageType"`
+}
+
+func CreateInfoMessage(message string) Message {
+	return Message{Message:message, MessageType:"info"}
+}
+func CreateDefaultMessage(message string, username string) Message {
+	return Message{Username: username, Message:message, MessageType:"default"}
 }
 
 var Clients = make(map[*websocket.Conn]bool)

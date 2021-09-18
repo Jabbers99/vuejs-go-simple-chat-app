@@ -6,16 +6,21 @@
             :size="70"
             ></v-progress-circular>
             <div v-for="(msg, i) in messages" :key="i">
-                <v-avatar
-                    class="avatar"
-                    color="primary"
-                    size="56"
-                >
-                    <span class="white--text text-h5">{{ msg.initials }}</span>
-                </v-avatar>
-                <div class="chattext">
-                <b>{{ msg.username }}</b><br>
-                    {{ msg.message }}
+                <div v-if="msg.messageType == 'default'">
+                    <v-avatar
+                        class="avatar"
+                        color="primary"
+                        size="56"
+                    >
+                        <span class="white--text text-h5">{{ msg.initials }}</span>
+                    </v-avatar>
+                    <div class="chattext-default">
+                    <b>{{ msg.username }}</b><br>
+                        {{ msg.message }}
+                    </div>
+                </div>
+                <div v-if="msg.messageType == 'info'">
+                    <span class="chattext-info">{{msg.message}}</span>
                 </div>
             </div>
         </div>
@@ -24,6 +29,9 @@
     </v-container>
 </template>
 <script>
+    function isEmptyOrSpaces(str){
+        return str === null || str.match(/^ *$/) !== null;
+    }
     export default {
         props: {
             Websockets : {}
@@ -48,9 +56,11 @@
                 this.messages.push(msg)
             },
             onEnter: function() {
-                console.log("Sent message: ", this.Message)
-                this.$socket.send(this.Message)
-                this.Message = ""
+                if (!isEmptyOrSpaces(this.Message)) {
+                    console.log("Sent message: ", this.Message)
+                    this.$socket.send(this.Message)
+                    this.Message = ""
+                }
             },
             connect : function(usernameDialog) {
                 usernameDialog.dialog = true;
@@ -70,10 +80,15 @@
 <style scoped>
     .avatar {
         float: left;
-        margin: 15px 10px 0 15px;
+        margin: 20px 20px 0 20px;
     }
-    .chattext {
-        padding: 15px;
+    .chattext-default {
+        padding: 20px;
+    }
+    .chattext-info {
+        margin-top: 20px;
+        margin-left: 20px;
+        display: block;
     }
     #chatbox {
         height: 500px;

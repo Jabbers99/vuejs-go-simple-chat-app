@@ -19,6 +19,7 @@ func HandleWSConn(hub *model.Hub, w http.ResponseWriter, r *http.Request) {
 	}
 	client := &model.Client{Conn: ws, Hub: hub, Send: make(chan []byte, 256)}
 	client.Hub.Register <- client
+	
 
 	// Allow collection of memory referenced by the caller by doing all work in
 	// new goroutines.
