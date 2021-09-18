@@ -4,7 +4,6 @@ import (
 	"log"
 	"time"
 	"encoding/json"
-	"fmt"
 
 	"github.com/gorilla/websocket"
 )
@@ -49,7 +48,6 @@ func (c *Client) WritePump() {
 			if err != nil {
 				return
 			}
-			fmt.Println(message)
 			w.Write(message)
 
 			// Add queued chat messages to the current websocket message.
@@ -110,6 +108,5 @@ func (c *Client) ReadPump() {
 			c.Authed = true
 			c.Hub.BroadcastInfoMessage(c.Username + " has joined the chat.")
 		}
-		fmt.Println("A: ", c.Username, c.Username == "", c.Authed)
 	}
 }
