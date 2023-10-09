@@ -1,5 +1,5 @@
 # Vue.js & Go Simple Websocket Chat App
-### A simple chat app built with [Vue.JS](https://vuejs.org/) using a [Go](https://golang.org/) API
+### A simple chat app built with [Vue.JS](https://vuejs.org/) using a [Go](https://golang.org/) API using websockets.
 ## Project setup
 ```
 npm install
